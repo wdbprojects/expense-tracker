@@ -1,58 +1,58 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import Header from "./components/Header";
+import TransactionForm from "./components/TransactionForm";
 
 function App() {
-  const [form, setForm] = useState({
-    amount: 0,
-    description: "",
-    date: "",
-  });
+  const [transactions, setTransactions] = useState([]);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const fetchData = async () => {
     try {
-      const response = await axios.post("http://localhost:5000/transaction", {
-        method: "POST",
-        body: form,
-      });
-      console.log(response);
+      const { data } = await axios.get(
+        "http://localhost:5000/api/v1/transaction",
+      );
+      setTransactions(data);
     } catch (err) {
       console.log(err);
     }
   };
-  const handleInput = (event) => {
-    setForm({
-      ...form,
-      [event.target.name]: event.target.value,
-    });
-  };
+
+  useEffect(() => {
+    fetchData();
+    /* inputRef.current.focus(); */
+  }, []);
 
   return (
     <>
-      <h2>Expense Tracker</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="number"
-          name="amount"
-          value={form.amount}
-          onChange={handleInput}
-          placeholder="Enter transaction amount"
-        />
-        <input
-          type="text"
-          name="description"
-          value={form.description}
-          placeholder="Enter transaction details"
-          onChange={handleInput}
-        />
-        <input
-          type="date"
-          name="date"
-          value={form.date}
-          onChange={handleInput}
-        />
-        <button type="submit">Submit</button>
-      </form>
+      <div className="mainPage">
+        <Header />
+        <TransactionForm fetchTransaction={fetchData} />
+
+        <hr />
+        <section>
+          <table>
+            <thead>
+              <tr>
+                <th>Amount</th>
+                <th>Description</th>
+                <th>Date </th>
+              </tr>
+            </thead>
+            <tbody>
+              {transactions.map((transaction) => {
+                const { _id, amount, description, date } = transaction;
+                return (
+                  <tr key={_id}>
+                    <td>{amount}</td>
+                    <td>{description}</td>
+                    <td>{date}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </section>
+      </div>
     </>
   );
 }
