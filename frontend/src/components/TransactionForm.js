@@ -20,7 +20,7 @@ const initialForm = {
   date: new Date(),
 };
 
-const TransactionForm = ({ fetchTransaction }) => {
+const TransactionForm = ({ fetchTransactions }) => {
   const [form, setForm] = useState(initialForm);
   const textRef = useRef(null);
 
@@ -33,7 +33,7 @@ const TransactionForm = ({ fetchTransaction }) => {
       );
       if (data) {
         setForm(initialForm);
-        fetchTransaction();
+        fetchTransactions();
         textRef.current.focus();
       }
     } catch (err) {
@@ -93,7 +93,7 @@ const TransactionForm = ({ fetchTransaction }) => {
                 onChange={handleDate}
                 renderInput={(params) => <TextField size="small" {...params} />}
               />
-              <Button type="submit" variant="outlined">
+              <Button type="submit" variant="outlined" color="secondary">
                 Add Transaction
               </Button>
             </LocalizationProvider>

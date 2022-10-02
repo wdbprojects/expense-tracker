@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import Header from "./components/Header";
 import TransactionForm from "./components/TransactionForm";
+import TransactionList from "./components/TransactionList";
 
 function App() {
   const [transactions, setTransactions] = useState([]);
@@ -26,32 +27,12 @@ function App() {
     <>
       <div className="mainPage">
         <Header />
-        <TransactionForm fetchTransaction={fetchData} />
-
+        <TransactionForm fetchTransactions={fetchData} />
         <hr />
-        <section>
-          <table>
-            <thead>
-              <tr>
-                <th>Amount</th>
-                <th>Description</th>
-                <th>Date </th>
-              </tr>
-            </thead>
-            <tbody>
-              {transactions.map((transaction) => {
-                const { _id, amount, description, date } = transaction;
-                return (
-                  <tr key={_id}>
-                    <td>{amount}</td>
-                    <td>{description}</td>
-                    <td>{date}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </section>
+        <TransactionList
+          transactions={transactions}
+          fetchTransactions={fetchData}
+        />
       </div>
     </>
   );

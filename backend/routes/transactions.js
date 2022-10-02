@@ -18,4 +18,9 @@ router.post("/transaction", async (req, res) => {
   res.json({ message: "Success!!" });
 });
 
+router.delete("/transaction/:id", async (req, res) => {
+  await Transaction.findOneAndDelete({ _id: req.params.id });
+  res.json({ message: "Transaction deleted successfully!" });
+});
+
 module.exports = router;
